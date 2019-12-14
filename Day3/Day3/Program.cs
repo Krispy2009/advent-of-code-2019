@@ -287,7 +287,7 @@ namespace Day3
     class Part2
     {
 
-        HashSet<Coordinate> coordinates = new HashSet<Coordinate>();
+        Dictionary<Coordinate, int> coordinates = new Dictionary<Coordinate, int>();
         ArrayList wire1Steps = new ArrayList();
         ArrayList wire2Steps = new ArrayList();
         ArrayList crossings = new ArrayList();
@@ -332,11 +332,14 @@ namespace Day3
                 newCoordinate = new Coordinate(x, y, wireName, step);
                 if (wireName == "A")
                 {
-
-                    coordinates.Add(newCoordinate);
+                    try
+                    {
+                        coordinates.Add(newCoordinate, step);
+                    }
+                    catch { }
 
                 }
-                else if (coordinates.Contains(newCoordinate))
+                else if (coordinates.ContainsKey(newCoordinate))
                 {
                     crossings.Add(newCoordinate);
                 }
@@ -352,6 +355,7 @@ namespace Day3
 
             int x = 0;
             int y = 0;
+            int step = 0;
 
             string textFile = @"C:\Users\krispy\source\repos\advent-of-code-2019\Day3\input.txt";
             string[] wires = File.ReadAllLines(textFile);
@@ -360,13 +364,13 @@ namespace Day3
             string[] wire2 = wires[1].Split(',');
 
             // This is the origin
-            Coordinate coordinate = new Coordinate(x, y, "A", 0);
-
+            Coordinate coordinate = new Coordinate(x, y, "A", step);
             foreach (string instruction in wire1)
             {
                 coordinate = part.GenerateCoordinates(coordinate.X, coordinate.Y, instruction, coordinate.WireName, coordinate.Step);
                 x = coordinate.X;
                 y = coordinate.Y;
+                step = part.coordinates[coordinate];
             }
 
 
@@ -378,6 +382,7 @@ namespace Day3
                 coordinate = part.GenerateCoordinates(coordinate.X, coordinate.Y, instruction, coordinate.WireName, coordinate.Step);
                 x = coordinate.X;
                 y = coordinate.Y;
+                step = coordinate.Step;
             }
             Console.WriteLine("Generated {0} Coordinates for Wire A", part.coordinates.Count);
             Console.WriteLine("Found {0} crossings", part.crossings.Count);
@@ -396,6 +401,11 @@ namespace Day3
 
             Console.WriteLine("Smallest Distance: {0} \n Coordinates <{1},{2}>", smallestDistance, smallestCoordinate.X, smallestCoordinate.Y);
 
+            //int leastSteps = int.MaxValue;
+            //foreach (Coordinate c in part.crossings)
+            //{
+            //    Coordinate wire1Coordinate = part.coordinates.T;
+            //}
 
             Console.ReadKey();
 
