@@ -331,7 +331,8 @@ namespace Day3
                 step += 1;
                 newCoordinate = new Coordinate(x, y, wireName, step);
                 if (wireName == "A")
-                {
+                {   
+                    //Dictionaries throw if you try to add a key that's already there
                     try
                     {
                         coordinates.Add(newCoordinate, step);
@@ -399,13 +400,22 @@ namespace Day3
                 }
             }
 
+            // For Part 1 
             Console.WriteLine("Smallest Distance: {0} \n Coordinates <{1},{2}>", smallestDistance, smallestCoordinate.X, smallestCoordinate.Y);
 
-            //int leastSteps = int.MaxValue;
-            //foreach (Coordinate c in part.crossings)
-            //{
-            //    Coordinate wire1Coordinate = part.coordinates.T;
-            //}
+            int leastSteps = int.MaxValue;
+            int OutSteps;
+            foreach (Coordinate c in part.crossings)
+            {
+                bool foundCoordinate = part.coordinates.TryGetValue(c, out OutSteps);
+                if(foundCoordinate && OutSteps + c.Step < leastSteps)
+                {
+                    leastSteps = OutSteps + c.Step;
+                }
+            }
+
+            // For Part 2
+            Console.WriteLine("Least amount of steps: {0}", leastSteps);
 
             Console.ReadKey();
 
