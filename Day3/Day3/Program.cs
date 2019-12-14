@@ -219,23 +219,23 @@ namespace Day3
 
     class Coordinate
     {
-        public int x { get; set; }
-        public int y { get; set; }
-        public string wireName { get; set; }
-        public int step { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public string WireName { get; set; }
+        public int Step { get; set; }
 
         public Coordinate(int x, int y, string wireName, int step)
         {
-            this.x = x;
-            this.y = y;
-            this.wireName = wireName;
-            this.step = step;
+            X = x;
+            Y = y;
+            WireName = wireName;
+            Step = step;
         }
 
         public int CalculateDistanceFrom0()
         {
 
-            int distance = Math.Abs(this.x) + Math.Abs(this.y);
+            int distance = Math.Abs(X) + Math.Abs(Y);
             return distance;
 
         }
@@ -244,22 +244,22 @@ namespace Day3
 
             Coordinate c = obj as Coordinate;
 
-            return this.x == c.x && this.y == c.y;
+            return X == c.X && Y == c.Y;
         }
 
         public override int GetHashCode()
         {
             // Generate a hash by creating a tuple object and getting the hash of that
             //this takes in to consideration the position of the numbers in the tuple (1,2) != (2,1)
-            return Tuple.Create(x, y).GetHashCode();
+            return Tuple.Create(X, Y).GetHashCode();
         }
 
     }
 
     class Instruction
     {
-        char direction;
-        int steps;
+        readonly char direction;
+        private int steps;
 
         public Instruction(string instruction)
         {
@@ -275,12 +275,12 @@ namespace Day3
 
         public char GetDirection()
         {
-            return this.direction;
+            return direction;
         }
 
         public int GetSteps()
         {
-            return this.steps;
+            return steps;
         }
     }
 
@@ -364,9 +364,9 @@ namespace Day3
 
             foreach (string instruction in wire1)
             {
-                coordinate = part.GenerateCoordinates(coordinate.x, coordinate.y, instruction, coordinate.wireName, coordinate.step);
-                x = coordinate.x;
-                y = coordinate.y;
+                coordinate = part.GenerateCoordinates(coordinate.X, coordinate.Y, instruction, coordinate.WireName, coordinate.Step);
+                x = coordinate.X;
+                y = coordinate.Y;
             }
 
 
@@ -375,9 +375,9 @@ namespace Day3
             coordinate = new Coordinate(0, 0, "B", 0);
             foreach (string instruction in wire2)
             {
-                coordinate = part.GenerateCoordinates(coordinate.x, coordinate.y, instruction, coordinate.wireName, coordinate.step);
-                x = coordinate.x;
-                y = coordinate.y;
+                coordinate = part.GenerateCoordinates(coordinate.X, coordinate.Y, instruction, coordinate.WireName, coordinate.Step);
+                x = coordinate.X;
+                y = coordinate.Y;
             }
             Console.WriteLine("Generated {0} Coordinates for Wire A", part.coordinates.Count);
             Console.WriteLine("Found {0} crossings", part.crossings.Count);
@@ -394,7 +394,7 @@ namespace Day3
                 }
             }
 
-            Console.WriteLine("Smallest Distance: {0} \n Coordinates <{1},{2}>", smallestDistance, smallestCoordinate.x, smallestCoordinate.y);
+            Console.WriteLine("Smallest Distance: {0} \n Coordinates <{1},{2}>", smallestDistance, smallestCoordinate.X, smallestCoordinate.Y);
 
 
             Console.ReadKey();
