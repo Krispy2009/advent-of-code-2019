@@ -41,7 +41,7 @@ namespace Day3
                     }
                     break;
                 case 'L':
-                    // Go right from the initial x,y coordinates, add the generated coordinates in the set and return the last coordinate generated
+                    // Go left from the initial x,y coordinates, add the generated coordinates in the set and return the last coordinate generated
                     while (i < instruction.Item2)
                     {
                         x -= 1;
@@ -53,7 +53,7 @@ namespace Day3
                     }
                     break;
                 case 'U':
-                    // Go right from the initial x,y coordinates, add the generated coordinates in the set and return the last coordinate generated
+                    // Go up from the initial x,y coordinates, add the generated coordinates in the set and return the last coordinate generated
                     while (i < instruction.Item2)
                     {
                         y += 1;
@@ -65,7 +65,7 @@ namespace Day3
                     }
                     break;
                 case 'D':
-                    // Go right from the initial x,y coordinates, add the generated coordinates in the set and return the last coordinate generated
+                    // Go down from the initial x,y coordinates, add the generated coordinates in the set and return the last coordinate generated
                     while (i < instruction.Item2)
                     {
                         y -= 1;
@@ -103,7 +103,7 @@ namespace Day3
                     }
                     break;
                 case 'L':
-                    // Go right from the initial x,y coordinates, add the generated coordinates in the set and return the last coordinate generated
+                    // Go left from the initial x,y coordinates, add the generated coordinates in the set and return the last coordinate generated
                     while (i < instruction.Item2)
                     {
                         x -= 1;
@@ -118,7 +118,7 @@ namespace Day3
                     }
                     break;
                 case 'U':
-                    // Go right from the initial x,y coordinates, add the generated coordinates in the set and return the last coordinate generated
+                    // Go up from the initial x,y coordinates, add the generated coordinates in the set and return the last coordinate generated
                     while (i < instruction.Item2)
                     {
                         y += 1;
@@ -133,7 +133,7 @@ namespace Day3
                     }
                     break;
                 case 'D':
-                    // Go right from the initial x,y coordinates, add the generated coordinates in the set and return the last coordinate generated
+                    // Go down from the initial x,y coordinates, add the generated coordinates in the set and return the last coordinate generated
                     while (i < instruction.Item2)
                     {
                         y -= 1;
@@ -214,7 +214,6 @@ namespace Day3
 
             Console.ReadKey();
 
-            // Go to http://aka.ms/dotnet-get-started-console to continue learning how to build a console app! 
         }
     }
 }
