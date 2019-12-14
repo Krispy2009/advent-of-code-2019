@@ -163,57 +163,265 @@ namespace Day3
         }
 
 
+        //static void Main(string[] args)
+        //{
+
+        //    Part1 part = new Part1();
+
+        //    int x = 0;
+        //    int y = 0;
+        //    //Store the coordinates of wire 1 in a set for fast lookups later
+
+        //    string textFile = @"C:\Users\krispy\source\repos\advent-of-code-2019\Day3\input.txt";
+        //    string[] wires = File.ReadAllLines(textFile);
+
+        //    string[] wire1 = wires[0].Split(',');
+        //    string[] wire2 = wires[1].Split(',');
+        //    Tuple<int, int> coordinates = new Tuple<int, int>(x, y);
+
+        //    foreach(string instruction in wire1)
+        //    {
+        //        coordinates = part.GenerateWire1Coordinates(x, y, instruction);
+        //        x = coordinates.Item1;
+        //        y = coordinates.Item2;
+        //    }
+
+        //    // Reset coordinates for second wire
+        //    x= 0;
+        //    y = 0;
+        //    foreach(string instruction in wire2) {
+        //        coordinates = part.GenerateWire2Coordinates(x, y, instruction);
+        //        x = coordinates.Item1;
+        //        y = coordinates.Item2;
+        //    }
+
+        //    Console.WriteLine("Found {0} crossings", part.crossings.Count);
+
+        //    int smallestDistance = int.MaxValue;
+        //    Tuple<int, int> smallestCoordinate = new Tuple<int, int>(0,0);
+        //    foreach(Tuple<int, int> coordinate in part.crossings)
+        //    {
+        //        int distance = part.CalculateDistanceFrom0(coordinate);
+        //        if(distance < smallestDistance)
+        //        {
+        //            smallestDistance = distance;
+        //            smallestCoordinate = coordinate;
+        //        }
+        //    }
+
+        //    Console.WriteLine("Smallest Distance: {0} \n Coordinates <{1},{2}>", smallestDistance, smallestCoordinate.Item1, smallestCoordinate.Item2);
+
+
+        //    Console.ReadKey();
+
+        //    }
+    }
+
+    class Coordinate
+    {
+        int x;
+        int y;
+        string wireName;
+        int step;
+
+        public Coordinate(int x, int y, string wireName, int step)
+        {
+            this.x = x;
+            this.y = y;
+            this.wireName = wireName;
+            this.step = step;
+        }
+
+        public int CalculateDistanceFrom0()
+        {
+
+            int distance = Math.Abs(this.x) + Math.Abs(this.y);
+            return distance;
+
+        }
+        public int GetX()
+        {
+            return x;
+        }
+        public int GetY()
+        {
+            return y;
+        }
+        public int GetStep()
+        {
+            return step;
+        }
+
+
+        public string GetWireName()
+        {
+            return this.wireName;
+        }
+
+        public bool EqualsTo(Coordinate coordinate) => this.x == coordinate.x && this.y == coordinate.y;
+
+
+    }
+
+    class Instruction
+    {
+        char direction;
+        int steps;
+
+        public Instruction(string instruction)
+        {
+
+            char direction = instruction[0];
+            //Remove the direction from the instructions before converting to an int
+            int steps = Convert.ToInt32(instruction.Remove(0, 1));
+
+            this.direction = direction;
+            this.steps = steps;
+
+        }
+
+        public char GetDirection()
+        {
+            return this.direction;
+        }
+
+        public int GetSteps()
+        {
+            return this.steps;
+        }
+    }
+
+    class Part2
+    {
+
+        int wire1StepCount = 0;
+        int wire2StepCount = 0;
+
+        ArrayList coordinates = new ArrayList();
+        ArrayList wire1Steps = new ArrayList();
+        ArrayList wire2Steps = new ArrayList();
+        ArrayList crossings = new ArrayList();
+
+        public Coordinate GenerateCoordinates(int x, int y, string input, string wireName, int step)
+        {
+            Coordinate newCoordinate = new Coordinate(x,y,wireName, step);
+            Instruction instruction = new Instruction(input);
+
+            int i = 0;
+            int steps = instruction.GetSteps();
+            char direction = instruction.GetDirection();
+
+            while (i < steps)
+            {
+                switch (direction)
+                {
+                    case 'R':
+                        // Go right from the initial x,y coordinates, add the generated coordinates in the set and return the last coordinate generated
+                        x += 1;
+                        i++;
+                        break;
+                    case 'L':
+                        // Go left from the initial x,y coordinates, add the generated coordinates in the set and return the last coordinate generated
+                        x -= 1;
+                        i++;
+                        break;
+                    case 'U':
+                        // Go up from the initial x,y coordinates, add the generated coordinates in the set and return the last coordinate generated
+                        y += 1;
+                        i++;
+                        break;
+                    case 'D':
+                        // Go down from the initial x,y coordinates, add the generated coordinates in the set and return the last coordinate generated
+                        y -= 1;
+                        i++;
+                        break;
+                    default:
+                        throw new Exception("OH NO - Invalid instruction received");
+                }
+                step += 1;
+                newCoordinate = new Coordinate(x, y, wireName, step);
+                if (wireName == "A")
+                {
+                    
+                coordinates.Add(newCoordinate);
+
+                } else if(IsIn(newCoordinate, coordinates))
+                {
+                    crossings.Add(newCoordinate);
+                }
+            }
+            Console.WriteLine("Wire {0} turns at: <{1},{2}>", wireName, x, y);
+            return newCoordinate;
+        }
+
+        public Boolean IsIn(Coordinate coordinate, ArrayList list)
+        {
+            foreach(Coordinate c in list)
+            {
+                //
+                if (c.GetWireName() != coordinate.GetWireName() && c.Equals(coordinate))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         static void Main(string[] args)
         {
 
-            Part1 part = new Part1();
+            Part2 part = new Part2();
 
             int x = 0;
             int y = 0;
-            //Store the coordinates of wire 1 in a set for fast lookups later
 
             string textFile = @"C:\Users\krispy\source\repos\advent-of-code-2019\Day3\input.txt";
             string[] wires = File.ReadAllLines(textFile);
 
             string[] wire1 = wires[0].Split(',');
             string[] wire2 = wires[1].Split(',');
-            Tuple<int, int> coordinates = new Tuple<int, int>(x, y);
 
-            foreach(string instruction in wire1)
+            // This is the origin
+            Coordinate coordinate = new Coordinate(x, y, "A", 0);
+
+            foreach (string instruction in wire1)
             {
-                coordinates = part.GenerateWire1Coordinates(x, y, instruction);
-                x = coordinates.Item1;
-                y = coordinates.Item2;
+                coordinate = part.GenerateCoordinates(coordinate.GetX(), coordinate.GetY(), instruction, coordinate.GetWireName(), coordinate.GetStep());
+                x = coordinate.GetX();
+                y = coordinate.GetY();
             }
 
             // Reset coordinates for second wire
-            x= 0;
-            y = 0;
-            foreach(string instruction in wire2) {
-                coordinates = part.GenerateWire2Coordinates(x, y, instruction);
-                x = coordinates.Item1;
-                y = coordinates.Item2;
+
+            coordinate = new Coordinate(0, 0, "B", 0);
+            foreach (string instruction in wire2)
+            {
+                coordinate = part.GenerateCoordinates(coordinate.GetX(), coordinate.GetY(), instruction, coordinate.GetWireName(), coordinate.GetStep());
+                x = coordinate.GetX();
+                y = coordinate.GetY();
             }
 
             Console.WriteLine("Found {0} crossings", part.crossings.Count);
 
             int smallestDistance = int.MaxValue;
-            Tuple<int, int> smallestCoordinate = new Tuple<int, int>(0,0);
-            foreach(Tuple<int, int> coordinate in part.crossings)
+            Coordinate smallestCoordinate = new Coordinate(0, 0, "A", 0);
+            foreach (Coordinate c in part.crossings)
             {
-                int distance = part.CalculateDistanceFrom0(coordinate);
-                if(distance < smallestDistance)
+                int distance = c.CalculateDistanceFrom0();
+                if (distance < smallestDistance)
                 {
                     smallestDistance = distance;
-                    smallestCoordinate = coordinate;
+                    smallestCoordinate = c;
                 }
             }
 
-            Console.WriteLine("Smallest Distance: {0} \n Coordinates <{1},{2}>", smallestDistance, smallestCoordinate.Item1, smallestCoordinate.Item2);
+            Console.WriteLine("Smallest Distance: {0} \n Coordinates <{1},{2}>", smallestDistance, smallestCoordinate.GetX(), smallestCoordinate.GetY());
 
 
             Console.ReadKey();
 
         }
     }
+
+
 }
