@@ -16,14 +16,16 @@ namespace Day4
             num = num.Remove(0, 1);
             int idx = 0;
             bool hasMoreThanTwo = false;
+
             foreach (char c in num)
 
             {
                 if (c == prevChar)
                 {
 
+                    bool isLastOne = idx == num.Length - 1;
 
-                    if (idx < num.Length -1 && num[idx + 1] != c && !hasMoreThanTwo)
+                    if (isLastOne && !hasMoreThanTwo || idx < num.Length-1 && num[idx + 1] != c && !hasMoreThanTwo)
                     {
 
                         return true;
@@ -73,6 +75,22 @@ namespace Day4
             return true;
         }
 
+        public bool AllDigitsTheSame(int number)
+        {
+            string num = number.ToString();
+            char firstChar = num[0];
+            
+            foreach (char c in num)
+            {
+                if(firstChar != c)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         static void Main(string[] args)
         {
             /*
@@ -94,12 +112,12 @@ namespace Day4
             int high = 562041;
             int count = 0;
 
-            low = 111122;
-            high = 111127;
 
-            while (low < high)
+            while (low <= high)
             {
-                if (parts.HasIdenticalAdjacentDigits(low) && parts.HasIncreasingDigits(low)) { Console.WriteLine(low);  count++; }
+                if (parts.AllDigitsTheSame(low)) { }
+
+                else if (parts.HasIdenticalAdjacentDigits(low) && parts.HasIncreasingDigits(low)) { Console.WriteLine(low);  count++; }
                 low++;
             }
 
