@@ -15,28 +15,39 @@ namespace Day4
             char prevChar = num[0];
             num = num.Remove(0, 1);
             int idx = 0;
+            bool hasMoreThanTwo = false;
             foreach (char c in num)
 
             {
-                idx += 1;
                 if (c == prevChar)
                 {
-                    if (idx + 1 < num.Length && num[idx + 1] != c)
+
+
+                    if (idx < num.Length -1 && num[idx + 1] != c && !hasMoreThanTwo)
                     {
 
                         return true;
                     }
                     else
                     {
-                        // Three or more detected! Abort! Abort!
-                        
-                        return false;
+                        // Three or more detected! Abort! Abort! Check if there's a chance for another double digit later
+                        if (idx > 2)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            hasMoreThanTwo = true;
+                            prevChar = c;
+                        }
                     }
                 }
                 else
                 {
+                    hasMoreThanTwo = false;
                     prevChar = c;
                 }
+                idx++;
             }
             return false;
 
