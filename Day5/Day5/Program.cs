@@ -38,7 +38,7 @@ namespace Day5
             while (Idx < progInstructions.Length)
             {
                 int opcode = progInstructions[Idx];
-                Console.WriteLine("{0}/{1}: Executing opcode: {2}",Idx,progInstructions.Length, opcode);
+                Console.WriteLine("{0}/{1}: Executing opcode: {2}", Idx, progInstructions.Length, opcode);
                 ExecuteInstruction(opcode, inputValue);
 
             }
@@ -46,7 +46,7 @@ namespace Day5
             return -1;
         }
 
-        public void ExecuteInstruction(int opcode, int inputValue, int modeParam1=0, int modeParam2=0)
+        public void ExecuteInstruction(int opcode, int inputValue, int modeParam1 = 0, int modeParam2 = 0)
         {
 
             int first_position = 0;
@@ -88,7 +88,7 @@ namespace Day5
                     break;
                 case 3:
                     first_position = progInstructions[Idx + 1];
-                    
+
                     if (inputValue == int.MaxValue) { Console.WriteLine("Tried to read input but no input exists"); }
                     progInstructions[first_position] = inputValue;
                     Idx += 2;
@@ -97,12 +97,68 @@ namespace Day5
                     first_position = progInstructions[Idx + 1];
                     firstParam = modeParam1 == 1 ? first_position : progInstructions[first_position];
 
-                    Output.Add(progInstructions[first_position]);
+                    Output.Add(firstParam);
                     Idx += 2;
                     break;
                 case 99:
                     Console.WriteLine("Program Halted!");
                     Idx = int.MaxValue;
+                    break;
+
+                case 5:
+                    first_position = progInstructions[Idx + 1];
+                    second_position = progInstructions[Idx + 2];
+                    firstParam = modeParam1 == 1 ? first_position : progInstructions[first_position];
+                    secondParam = modeParam2 == 1 ? second_position : progInstructions[second_position];
+
+                    if (firstParam != 0)
+                    {
+                        Idx = secondParam;
+                    } else
+                    {
+                        Idx += 3;
+                    }
+                    break;
+                case 6:
+                    first_position = progInstructions[Idx + 1];
+                    second_position = progInstructions[Idx + 2];
+                    firstParam = modeParam1 == 1 ? first_position : progInstructions[first_position];
+                    secondParam = modeParam2 == 1 ? second_position : progInstructions[second_position];
+
+                    if (firstParam == 0)
+                    {
+                        Idx = secondParam;
+                    } else
+                    {
+                        Idx += 3;
+                    }
+                    break;
+                /*
+Opcode 7 is less than: if the first parameter is less than the second parameter, it stores 1 in the position given by the third parameter. Otherwise, it stores 0.
+Opcode 8 is equals: if the first parameter is equal to the second parameter, it stores 1 in the position given by the third parameter. Otherwise, it stores 0.*/
+
+                case 7:
+                    first_position = progInstructions[Idx + 1];
+                    second_position = progInstructions[Idx + 2];
+                    destination = progInstructions[Idx + 3];
+
+                    firstParam = modeParam1 == 1 ? first_position : progInstructions[first_position];
+                    secondParam = modeParam2 == 1 ? second_position : progInstructions[second_position];
+
+                    progInstructions[destination] = firstParam < secondParam ? 1 : 0;
+                    Idx += 4;
+                    break;
+
+                case 8:
+                    first_position = progInstructions[Idx + 1];
+                    second_position = progInstructions[Idx + 2];
+                    destination = progInstructions[Idx + 3];
+
+                    firstParam = modeParam1 == 1 ? first_position : progInstructions[first_position];
+                    secondParam = modeParam2 == 1 ? second_position : progInstructions[second_position];
+
+                    progInstructions[destination] = firstParam == secondParam ? 1 : 0;
+                    Idx += 4;
                     break;
 
                 default:
@@ -151,8 +207,8 @@ namespace Day5
 
             //int[] progInstructions = { 3, 0, 4, 0, 99 };
             //int[] progInstructions = { 1002, 4, 3, 4, 33 };
-
-            input.Add(1);
+            //int[] progInstructions = {3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99 };
+            input.Add(5);
 
             Computer computer = new Computer(input, output, progInstructions, 0);
             computer.RunProgram();
